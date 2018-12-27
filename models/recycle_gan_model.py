@@ -318,12 +318,13 @@ class RecycleGANModel(BaseModel):
         self.rec_A = rec_A.data
         self.rec_B = rec_B.data
 
-        self.loss_G_A = loss_G_A0.data[0] + loss_G_A1.data[0] + loss_G_A2.data[0]
-        self.loss_G_B = loss_G_B0.data[0] + loss_G_B1.data[0] + loss_G_B2.data[0]
-        self.loss_cycle_A = loss_cycle_A.data[0]
-        self.loss_cycle_B = loss_cycle_B.data[0]
-        self.loss_pred_A = loss_pred_A.data[0]
-        self.loss_pred_B = loss_pred_B.data[0]
+        #self.loss_G_A = loss_G_A0.data[0] + loss_G_A1.data[0] + loss_G_A2.data[0]
+        self.loss_G_A = loss_G_A0.item() + loss_G_A1.item() + loss_G_A2.item()
+        self.loss_G_B = loss_G_B0.item() + loss_G_B1.item() + loss_G_B2.item()
+        self.loss_cycle_A = loss_cycle_A.item()
+        self.loss_cycle_B = loss_cycle_B.item()
+        self.loss_pred_A = loss_pred_A.item()
+        self.loss_pred_B = loss_pred_B.item()
 
     def optimize_parameters(self):
         # forward
