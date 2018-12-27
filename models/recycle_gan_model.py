@@ -208,7 +208,7 @@ class RecycleGANModel(BaseModel):
         pred_B = self.fake_B_pool.query(self.pred_B2)
         loss_D_A3 = self.backward_D_basic(self.netD_A, self.real_B2, pred_B)
 
-        self.loss_D_A = loss_D_A0.data[0] + loss_D_A1.data[0] + loss_D_A2.data[0] + loss_D_A3.data[0]
+        self.loss_D_A = loss_D_A0.item() + loss_D_A1.item() + loss_D_A2.item() + loss_D_A3.item()
 
     def backward_D_B(self):
         fake_A0 = self.fake_A_pool.query(self.fake_A0)
