@@ -2,7 +2,7 @@ import time
 from options.train_options import TrainOptions
 from data.data_loader import CreateDataLoader
 from models.models import create_model
-from util.#visualizer import #visualizer
+#from util.visualizer import visualizer
 
 opt = TrainOptions().parse()
 data_loader = CreateDataLoader(opt)
