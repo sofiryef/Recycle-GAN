@@ -37,13 +37,13 @@ class UnalignedTripletDataset(BaseDataset):
         B_path = self.B_paths[index_B]
         # print('(A, B) = (%d, %d)' % (index_A, index_B))
 	
-	# read the triplet from A and B -- 
+	    # read the triplet from A and B --
         A_img = Image.open(A_path).convert('RGB')
         B_img = Image.open(B_path).convert('RGB')
 
         #A = self.transform(A_img)
         #B = self.transform(B_img)
-	# get the triplet from A
+	    # get the triplet from A
         A_img = A_img.resize((self.opt.loadSize * 3, self.opt.loadSize), Image.BICUBIC)
         A_img = self.transform(A_img)
 
@@ -62,7 +62,7 @@ class UnalignedTripletDataset(BaseDataset):
         A2 = A_img[:, h_offset:h_offset + self.opt.fineSize,
                2*w + w_offset :2*w + w_offset + self.opt.fineSize]        
 
-	## -- get the triplet from B
+        ## -- get the triplet from B
         B_img = B_img.resize((self.opt.loadSize * 3, self.opt.loadSize), Image.BICUBIC)
         B_img = self.transform(B_img)
 
@@ -81,8 +81,8 @@ class UnalignedTripletDataset(BaseDataset):
         B2 = B_img[:, h_offset:h_offset + self.opt.fineSize,
                2*w + w_offset :2*w + w_offset + self.opt.fineSize]
 
-	#######    
-	input_nc = self.opt.input_nc
+        #######
+        input_nc = self.opt.input_nc
         output_nc = self.opt.output_nc
 
         #if input_nc == 1:  # RGB to gray
