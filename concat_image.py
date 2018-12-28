@@ -14,7 +14,7 @@ def get_image_label_from_name(folder_name):
         return folder_name.split("test")[1][0]
 
 
-def merge_images(images_path_list):
+def merge_images(images_path_list, path_to_save):
     images = map(Image.open, [im_path for im_path in images_path_list])
     widths, heights = zip(*(i.size for i in images))
 
@@ -28,8 +28,8 @@ def merge_images(images_path_list):
     for im in images:
         new_im.paste(im, (x_offset, 0))
         x_offset += im.size[0]
-
-    return new_im
+    quality_val = 100
+    new_im.save(path_to_save, quality=quality_val)
 
 
 def process_images(src, dst, test_percent):
@@ -61,22 +61,20 @@ def process_images(src, dst, test_percent):
                     if image_index % test_sampling_rate == 0:
                         # We should save the test image here
                         image_label = get_image_label_from_name(basename(current_folder))
-                        new_im = merge_images([only_files[image_index]])
-                        new_im.save(f"{dst}\\test{image_label}\\{str(test_count[image_label])}.jpg")
+                        merge_images([only_files[image_index]], f"{dst}\\test{image_label}\\{str(test_count[image_label])}.jpg")
                         test_count[image_label] += 1
                     continue
                 # Creating the triplet image
-                new_im = merge_images(only_files[image_index-2:image_index+1])
                 current_image_label = get_image_label_from_name(basename(current_folder))
-                new_im.save(f"{dst_folder}\\{str(train_count[current_image_label])}.jpg")
+                merge_images(only_files[image_index-2:image_index+1], f"{dst_folder}\\{str(train_count[current_image_label])}.jpg")
                 train_count[current_image_label] += 1
         else:
             # Here we just translate test images
             for image_index in range(0, len(only_files)):
                 if image_index % 100 == 0:
                     print(f"{basename(current_folder)}, progress - {image_index}/{len(only_files)}")
-                new_im = merge_images([only_files[image_index]])
                 image_label = get_image_label_from_name(basename(current_folder))
+                merge_images([only_files[image_index]], f"{dst}\\test{image_label}\\{str(test_count[image_label])}.jpg")
                 new_im.save(f"{dst}\\test{image_label}\\{str(test_count[image_label])}.jpg")
 
 
