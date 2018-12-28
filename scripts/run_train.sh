@@ -1,0 +1,1 @@
+python train.py --dataroot <DATASET_FULL_PATH> --model recycle_gan  --dataset_mode unaligned_triplet --name=<MAME> --save_epoch_freq 5

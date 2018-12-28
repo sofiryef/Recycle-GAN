@@ -1,0 +1,1 @@
+python test.py --dataroot <DATASET_FULL_PATH> --name <EXPERIMENT_NAME>

@@ -3,13 +3,15 @@ from PIL import Image
 from os import listdir
 from os.path import isfile, join, isdir, basename
 import os
-import math
 
-#src_folder = r"C:\code\Face\datasets\oren2trump_out384\trainB"
-#dst_folder = src_folder + r"_output"
 
 def get_image_label_from_name(folder_name):
-    return folder_name.split("train")[1][0]
+    if 'train' in folder_name:
+        # Train picture
+        return folder_name.split("train")[1][0]
+    else:
+        # Test picture
+        return folder_name.split("test")[1][0]
 
 
 def merge_images(images_path_list):
@@ -48,7 +50,6 @@ def process_images(src, dst, test_percent):
         only_files = [current_folder + "\\" + f for f in listdir(current_folder) if isfile(join(current_folder, f))]
         only_files.sort()
         if "train" in basename(current_folder).lower():
-            #test_sampling_rate = math.floor(len(only_files)/test_percent) if test_percent else len(only_files)+1
             test_sampling_rate = int(test_percent)
             for image_index in range(3, len(only_files)):
                 # Print progress
@@ -70,18 +71,22 @@ def process_images(src, dst, test_percent):
                 new_im.save(f"{dst_folder}\\{str(train_count[current_image_label])}.jpg")
                 train_count[current_image_label] += 1
         else:
+            # Here we just translate test images
             for image_index in range(0, len(only_files)):
                 if image_index % 100 == 0:
                     print(f"{basename(current_folder)}, progress - {image_index}/{len(only_files)}")
                 new_im = merge_images([only_files[image_index]])
-                new_im.save(f"{dst_folder}\\{str(image_index)}.jpg")
+                image_label = get_image_label_from_name(basename(current_folder))
+                new_im.save(f"{dst}\\test{image_label}\\{str(test_count[image_label])}.jpg")
 
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--src', required=True, help='path to the input folder')
-#parser.add_argument('--out', default='{input_folder}_output', help='path to the output folder')
 parser.add_argument('--out', required=True, help='path to the output folder')
-parser.add_argument('--test_percent', default=0, help='Percent of data to exclude from train')
+parser.add_argument('--test_percent', default=0, help='Percent of data to exclude from train (Use this in case you '
+                                                      'dont have test data in the src folder')
 opt = parser.parse_args()
 
-process_images(opt.src, opt.out.format(input_folder=opt.src), opt.test_percent)
+
+if __name__ == '__main__':
+    process_images(opt.src, opt.out.format(input_folder=opt.src), opt.test_percent)
